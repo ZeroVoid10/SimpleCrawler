@@ -1,2 +1,2 @@
 # SimpleCrawler
-A simple crawler writed by Java for a lesson's homework.
+A simple crawler writed by Java.
