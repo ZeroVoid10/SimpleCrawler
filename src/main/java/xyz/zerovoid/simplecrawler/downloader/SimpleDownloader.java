@@ -15,7 +15,6 @@ import java.nio.charset.StandardCharsets;
 /**
  * SimpleDownloader: a downloader example.
  * @author Zero Void <zerovoid10@163.com, zerolivenjoy@gmail.com>
- * @version 0.1.0
  * TODO: Abstract important part to make Downloader interface.
  * TODO: Configuture class add.
  */

@@ -7,6 +7,9 @@ import java.util.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author Zero Void <zerovoid10@163.com, zerolivenjoy@gmail.com>
+ */
 public class SimpleScheduler implements Scheduler {
 
     private static final Logger logger = LoggerFactory.getLogger(SimpleScheduler.class);

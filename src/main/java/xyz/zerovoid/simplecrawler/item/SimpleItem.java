@@ -2,6 +2,9 @@ package xyz.zerovoid.simplecrawler.item;
 
 import java.util.ArrayList;
 
+/**
+ * @author Zero Void <zerovoid10@163.com, zerolivenjoy@gmail.com>
+ */
 public class SimpleItem implements Item {
     
     private String pageUrl;

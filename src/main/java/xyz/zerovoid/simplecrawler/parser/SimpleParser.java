@@ -11,13 +11,21 @@ import xyz.zerovoid.simplecrawler.item.Item;
 import xyz.zerovoid.simplecrawler.item.SimpleItem;
 import xyz.zerovoid.simplecrawler.parser.Parser;
 
+/**
+ * @author Zero Void <zerovoid10@163.com, zerolivenjoy@gmail.com>
+ */
 public class SimpleParser implements Parser {
 
+    // TODO: Need A new class/metho for doing it.
     private String urlRender;
+
     public SimpleParser(String urlRender) {
         this.urlRender = urlRender;
     }
 
+    /**
+     * To get page title and new URLs.
+     */
 	@Override
 	public Item parse(String rawPage) {
         Document doc = Jsoup.parse(rawPage);
@@ -26,9 +34,6 @@ public class SimpleParser implements Parser {
         Element pageName = doc.selectFirst("h1[id=\"firstHeading\"]");
         item.setPageName(pageName.ownText());
 
-        //List<String> newUrls = doc.selectFirst(
-        //        "div[id=\"mw-content-text\"]").select(
-        //            "a[href][title]").eachAttr("href");
         Elements ul = doc.select("ul");
         Elements eleUrls = ul.select("a[href][title]");
         List<String> newUrls = eleUrls.eachAttr("href");
@@ -42,5 +47,4 @@ public class SimpleParser implements Parser {
 
 		return item;
 	}
-    
 }
