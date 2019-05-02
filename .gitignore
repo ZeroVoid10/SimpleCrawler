@@ -6,3 +6,9 @@ build
 
 # Ignore project plan directory
 plan
+
+# Ignore class path
+bin
+
+# Ignore Eclipse Project setting
+.settings
