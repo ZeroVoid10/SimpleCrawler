@@ -1,51 +1,50 @@
 package xyz.zerovoid.simplecrawler.downloader;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import xyz.zerovoid.simplecrawler.util.Page;
+import xyz.zerovoid.simplecrawler.util.Request;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 /**
- * SimpleDownloader: a downloader example.
- * @author Zero Void <zerovoid10@163.com, zerolivenjoy@gmail.com>
- * TODO: Abstract important part to make Downloader interface.
- * TODO: Configuture class add.
+ * A simple implementation of downloader.
+ * Get {@link util.Request}, and download {@link util.Page}.
+ * Just can download some static web site.
  */
-public class SimpleDownloader extends Downloader {
+public class SimpleDownloader extends AbstractDownloader {
     
-	final static Logger logger = LoggerFactory.getLogger(SimpleDownloader.class);
+	final static Logger logger = 
+        LoggerFactory.getLogger(SimpleDownloader.class);
 
-    /**
-     * SimpleDownloader default constructor.
-     * set default header
-     */
+    protected HttpGet httpGet = new HttpGet();
+
+    //TODO: Need to let Request set the HttpRequestBase and header.
     public SimpleDownloader() {
-        super();
-        httpGet.setHeader("User-Agent",
-                "Mozilla/5.0 (X11; Linux x86_64) " 
-                + "AppleWebKit/537.36 (KHTML, like Gecko)"
-                + " Chrome/73.0.3683.103 Safari/537.36");
+        this.httpClient = HttpClients.createDefault();
     }
 
-	protected void setURI(String url) {
-		logger.info("Set url:{}", url);
-		try {
-			this.httpGet.setURI(new URI(url));
-		} catch (URISyntaxException e) {
-            logger.error("URI Syntax error.");
-			e.printStackTrace();
-		}
-	}
+    public SimpleDownloader(CloseableHttpClient client) {
+        this.httpClient = client;
+    }
 
-    public String getURI() {
-        return httpGet.getURI().toString();
+    public CloseableHttpResponse getResponse() {
+        if (httpResponse == null) {
+            logger.warn("Response is null.");
+        }
+        return httpResponse;
     }
 
     /**
@@ -53,48 +52,58 @@ public class SimpleDownloader extends Downloader {
      * @throws IOException 
      * @throws UnsupportedOperationException 
      */
-    public String download(String url) throws UnsupportedOperationException, IOException {
-    	logger.info("Downloading...:{}", url);
-    	setURI(url);
-        String rawPage = "";
-    	try {
-			response = httpclient.execute(httpGet);
-		} catch (IOException e) {
-			e.printStackTrace();
-            System.out.println("Error: Abort connection.");
-        } finally {
-            // Downloading will block if not to close response.
-            rawPage = IOUtils.toString(response.getEntity().getContent(), 
-                StandardCharsets.UTF_8); 
-            response.close();
+	@Override
+	public Page download(Request request) 
+        throws URISyntaxException, ClientProtocolException, IOException {
+        System.out.println("Downloading page: " + request.getUrl());
+		setHttpGet(request);
+        httpResponse = httpClient.execute(httpGet);
+		return createPage(request);
+	}
+
+    protected void setHttpGet(Request request) throws URISyntaxException {
+        //httpGet.reset();
+        httpGet.setURI(new URI(request.getUrl()));
+        //FIXME: the headers in request may be null.
+        for (Map.Entry<String, String> entry : request.getHeaders().entrySet()) {
+            httpGet.setHeader(entry.getKey(), entry.getValue());
         }
-    	logger.info("Donwloaded:{}", url);
-        return rawPage;
     }
 
-    public CloseableHttpResponse getResponse() {
-        return response;
+    //FIXME: Let resonse charset for pageText.
+    protected Page createPage(Request request) 
+            throws UnsupportedOperationException, IOException {
+        HttpEntity entity = httpResponse.getEntity();
+        String pageText = IOUtils.toString(
+                entity.getContent(),
+                StandardCharsets.UTF_8
+                ); 
+        Page page = Page.Builder.getBuilder()
+            .setRequest(request)
+            .setText(pageText)
+            .setStatuCode(httpResponse.getStatusLine().getStatusCode())
+            .setContentLength(entity.getContentLength())
+            .build();
+        httpResponse.close();
+
+        return page;
     }
     
     /**
      * Just for single class testing.
      */
     public static void main(String[] args) throws IOException {
-        SimpleDownloader downloader = new SimpleDownloader();
+        SimpleDownloader downloader = 
+            SimpleDownloaderBuilder.getBuilder().build();
+        Page page = null;
+        Request request = new Request("http://www.bilibili.com");
 
-        downloader.download("http://bilibili.com");
-        CloseableHttpResponse response = downloader.getResponse();
         try {
-            HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                System.out.println(response.getStatusLine().toString());
-                for (Header header : response.getAllHeaders()) {
-                    System.out.println(header.toString());
-                }
-                System.out.println(downloader.getURI());
-            }
-        } finally {
-            response.close();
-        }
+			page = downloader.download(request);
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        System.out.println(page);
 	}
 }

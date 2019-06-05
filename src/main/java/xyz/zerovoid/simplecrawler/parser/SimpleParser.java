@@ -7,44 +7,48 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import xyz.zerovoid.simplecrawler.item.Item;
-import xyz.zerovoid.simplecrawler.item.SimpleItem;
-import xyz.zerovoid.simplecrawler.parser.Parser;
+import xyz.zerovoid.simplecrawler.item.Items;
+import xyz.zerovoid.simplecrawler.util.Page;
 
 /**
  * @author Zero Void <zerovoid10@163.com, zerolivenjoy@gmail.com>
+ * @since 0.1.0
  */
-public class SimpleParser implements Parser {
+public class SimpleParser extends AbstractParser {
 
-    // TODO: Need A new class/metho for doing it.
-    private String urlRender;
+    //private String urlRender;
 
-    public SimpleParser(String urlRender) {
-        this.urlRender = urlRender;
+    //public SimpleParser(String urlRender) {
+    //    this.urlRender = urlRender;
+    //}
+    public SimpleParser() {
+        super();
     }
 
     /**
      * To get page title and new URLs.
+     * TODO: Need to adjust.
      */
 	@Override
-	public Item parse(String rawPage) {
-        Document doc = Jsoup.parse(rawPage);
-        SimpleItem item = new SimpleItem();
+	public Items parse(Page page) {
+        Document doc = Jsoup.parse(page.getRawText());
+        Items items = new Items(page.getRequest());
 
         Element pageName = doc.selectFirst("h1[id=\"firstHeading\"]");
-        item.setPageName(pageName.ownText());
+        items.put("Title", pageName.ownText());
+        items.put("URL", page.getRequest().getUrl());
 
         Elements ul = doc.select("ul");
         Elements eleUrls = ul.select("a[href][title]");
         List<String> newUrls = eleUrls.eachAttr("href");
         for (String url : newUrls) {
             if (url.charAt(0) == '/') {
-                item.addUrl(this.urlRender + url);
+                items.addRequest(getRender(page.getRequest()) + url);
             } else {
-                item.addUrl(url);
+                items.addRequest(url);
             }
         }
 
-		return item;
+		return items;
 	}
 }
