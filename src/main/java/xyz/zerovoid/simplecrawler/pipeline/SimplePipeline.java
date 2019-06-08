@@ -1,11 +1,12 @@
 package xyz.zerovoid.simplecrawler.pipeline;
 
+import xyz.zerovoid.simplecrawler.item.Items;
 import xyz.zerovoid.simplecrawler.item.SimpleItem;
 
 /**
- * @author Zero Void <zerovoid10@163.com, zerolivenjoy@gmail.com>
+ * @since 0.1.0
  */
-public class SimplePipeline {
+public class SimplePipeline implements Pipeline {
 
     /**
      * Emmmm Just print on screen.
@@ -16,4 +17,9 @@ public class SimplePipeline {
 
         return true;
     }
+
+	@Override
+	public void processItem(Items items) {
+		
+	}
 }
