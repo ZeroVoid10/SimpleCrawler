@@ -34,7 +34,7 @@ public class Request {
     protected HashSet<String> tags;
 
     protected Request() {
-        logger.info("Create Request.");
+        logger.debug("Create Request.");
         headers = new HashMap<String, String>();
         tags = new HashSet<String>();
         setHeader("User-Agent", defaultAgent);
@@ -73,36 +73,36 @@ public class Request {
         return headers;
     }
 
-    public HashSet<String> getTag() {
+    public HashSet<String> getAllTag() {
         return tags;
     }
 
     public Request setUrl(String url) {
-        logger.info("Set url: {}", url);
+        logger.debug("Set url: {}", url);
         this.url = url;
         return this;
     }
 
     public Request setMethod(String method) {
-        logger.info("Set method: {}", method);
+        logger.debug("Set method: {}", method);
         this.method = method;
         return this;
     }
 
     public Request setPriority(int priority) {
-        logger.info("Set priority: {}", priority);
+        logger.debug("Set priority: {}", priority);
         this.priority = priority;
         return this;
     }
 
     public Request setHeader(String key, String value) {
-        logger.info("Add header: ({}, {})", key, value);
+        logger.debug("Add header: ({}, {})", key, value);
         this.headers.put(key, value);
         return this;
     }
 
     public Request addTag(String tag) {
-        logger.info("Set tag: {}", tag);
+        logger.debug("Set tag: {}", tag);
         this.tags.add(tag);
         return this;
     }
@@ -116,5 +116,9 @@ public class Request {
 
     public boolean containTag(String tag) {
         return tags.contains(tag);
+    }
+
+    public boolean tagsIsEmpty() {
+        return tags.isEmpty();
     }
 }

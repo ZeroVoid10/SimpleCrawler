@@ -5,6 +5,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +27,7 @@ public class RunnableSpiderBuilder extends AbstractSpiderBuilder {
 
     protected ArrayDeque<Request> feedRequest;
     protected int maxUrl = 0;
-    protected CloseableHttpClient client;
+    protected HttpClientBuilder httpClientBuilder;
     
     protected int nThread = 2;
     private String fileDir;
@@ -81,10 +82,10 @@ public class RunnableSpiderBuilder extends AbstractSpiderBuilder {
     
     @Override
 	protected void createDownloader() {
-        if (client == null) {
+        if (httpClientBuilder == null) {
             downloader = new SimpleDownloader();
         } else {
-            downloader = new SimpleDownloader(client);
+            downloader = new SimpleDownloader(httpClientBuilder);
         }
 	}
 
@@ -146,10 +147,12 @@ public class RunnableSpiderBuilder extends AbstractSpiderBuilder {
         return this;
     }
 
-    public RunnableSpiderBuilder setClient(CloseableHttpClient client) {
-        this.client = client;
+    public RunnableSpiderBuilder setHttpClientBuilder(
+            HttpClientBuilder builder) {
+        this.httpClientBuilder = builder;
         return this;
     }
+
 }
         
 

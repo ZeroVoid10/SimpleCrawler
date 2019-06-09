@@ -5,15 +5,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import xyz.zerovoid.simplecrawler.downloader.AbstractDownloader;
 import xyz.zerovoid.simplecrawler.downloader.SimpleDownloader;
 import xyz.zerovoid.simplecrawler.parser.AbstractParser;
 import xyz.zerovoid.simplecrawler.pipeline.ConsolePipeline;
 import xyz.zerovoid.simplecrawler.pipeline.Pipeline;
-import xyz.zerovoid.simplecrawler.scheduler.AbstractScheduler;
 import xyz.zerovoid.simplecrawler.scheduler.SimpleScheduler;
 import xyz.zerovoid.simplecrawler.util.Request;
 
@@ -22,7 +21,7 @@ import xyz.zerovoid.simplecrawler.util.Request;
  */
 public class SimpleSpiderBuilder extends AbstractSpiderBuilder {
 
-    private static Logger logger = 
+    protected static Logger logger = 
         LoggerFactory.getLogger(SimpleSpiderBuilder.class);
 
     protected AbstractParser parser;
@@ -32,7 +31,7 @@ public class SimpleSpiderBuilder extends AbstractSpiderBuilder {
 
     protected ArrayDeque<Request> feedRequest;
     protected int maxUrl = 0;
-    protected CloseableHttpClient client;
+    protected HttpClientBuilder httpClientBuilder;
 
     public static SimpleSpiderBuilder getNewBuilder() {
         return new SimpleSpiderBuilder();
@@ -62,8 +61,13 @@ public class SimpleSpiderBuilder extends AbstractSpiderBuilder {
             createPipelines();
         }
 
-		return new SimpleSpider(parser, scheduler, downloader, pipelines);
+        return createSpider();
 	}
+
+    @Override
+    protected SimpleSpider createSpider() {
+		return new SimpleSpider(parser, scheduler, downloader, pipelines);
+    }
 
 	@Override
 	protected void createScheduler() {
@@ -72,10 +76,10 @@ public class SimpleSpiderBuilder extends AbstractSpiderBuilder {
 
 	@Override
 	protected void createDownloader() {
-        if (client == null) {
+        if (httpClientBuilder == null) {
             downloader = new SimpleDownloader();
         } else {
-            downloader = new SimpleDownloader(client);
+            downloader = new SimpleDownloader(httpClientBuilder);
         }
 	}
 
@@ -88,18 +92,6 @@ public class SimpleSpiderBuilder extends AbstractSpiderBuilder {
 	public SimpleSpiderBuilder setParser(AbstractParser parser) {
         this.parser = parser;
         return this;
-	}
-
-	@Override
-	public SimpleSpiderBuilder setScheduler(AbstractScheduler scheduler) {
-        this.scheduler = (SimpleScheduler)scheduler;
-		return this;
-	}
-
-	@Override
-	public SimpleSpiderBuilder setDownloader(AbstractDownloader downloader) {
-        this.downloader = (SimpleDownloader)downloader;
-		return this;
 	}
 
 	@Override
@@ -131,8 +123,9 @@ public class SimpleSpiderBuilder extends AbstractSpiderBuilder {
         return this;
     }
 
-    public SimpleSpiderBuilder setClient(CloseableHttpClient client) {
-        this.client = client;
+    public SimpleSpiderBuilder setHttpClientBuilder(
+            HttpClientBuilder builder) {
+        this.httpClientBuilder = builder;
         return this;
     }
 }

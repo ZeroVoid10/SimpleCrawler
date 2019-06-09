@@ -74,7 +74,7 @@ public class NovelParser extends AbstractParser {
         return items;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         RunnableSpider spider = RunnableSpiderBuilder.getNewBuilder()
             .addRequest("http://www.shizongzui.cc/santi/")
             .setParser(new NovelParser())

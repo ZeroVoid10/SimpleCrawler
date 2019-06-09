@@ -35,7 +35,7 @@ public class Page {
         }
 
         public Page build() {
-            logger.info("Create Page.");
+            logger.debug("Create Page.");
             Page page = new Page();
             page.request = this.request;
             page.rawText = this.rawText;

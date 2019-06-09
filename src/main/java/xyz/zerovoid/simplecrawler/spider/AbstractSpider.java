@@ -1,14 +1,20 @@
 package xyz.zerovoid.simplecrawler.spider;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import xyz.zerovoid.simplecrawler.downloader.AbstractDownloader;
+import xyz.zerovoid.simplecrawler.item.Items;
 import xyz.zerovoid.simplecrawler.parser.AbstractParser;
 import xyz.zerovoid.simplecrawler.pipeline.Pipeline;
 import xyz.zerovoid.simplecrawler.scheduler.AbstractScheduler;
+import xyz.zerovoid.simplecrawler.util.Page;
 import xyz.zerovoid.simplecrawler.util.Request;
 
+/**
+ * @since 0.2.0
+ */
 abstract public class AbstractSpider {
 
     protected AbstractParser parser;
@@ -16,7 +22,7 @@ abstract public class AbstractSpider {
     protected AbstractDownloader downloader;
     protected ArrayList<Pipeline> pipelines;
     protected Set<Request> feedRequest;
-    
+
     protected AbstractSpider(AbstractParser parser,
             AbstractScheduler scheduler, 
             AbstractDownloader downloader, 
@@ -27,10 +33,15 @@ abstract public class AbstractSpider {
         this.pipelines = pipelines;
     }
 
+    protected AbstractSpider() {
+        pipelines = new ArrayList<Pipeline>();
+        feedRequest = new HashSet<Request>();
+    }
+
     /**
      * Run spider.
      **/
-    public abstract void run();
+    public abstract void crawl();
 
     public void addUrl(String url) {
         this.scheduler.push(url);

@@ -6,7 +6,9 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +18,6 @@ import xyz.zerovoid.simplecrawler.util.Request;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -29,23 +30,23 @@ public class SimpleDownloader extends AbstractDownloader {
 	final static Logger logger = 
         LoggerFactory.getLogger(SimpleDownloader.class);
 
-    protected HttpGet httpGet = new HttpGet();
-
     //TODO: Need to let Request set the HttpRequestBase and header.
     public SimpleDownloader() {
-        this.httpClient = HttpClients.createDefault();
+        super();
+        httpClientBuilder = null;
     }
 
-    public SimpleDownloader(CloseableHttpClient client) {
-        this.httpClient = client;
+    public SimpleDownloader(HttpClientBuilder builder) {
+        this.httpClientBuilder = builder;
+        
     }
 
-    public CloseableHttpResponse getResponse() {
-        if (httpResponse == null) {
-            logger.warn("Response is null.");
-        }
-        return httpResponse;
-    }
+    //public CloseableHttpResponse getResponse() {
+    //    if (httpResponse == null) {
+    //        logger.warn("Response is null.");
+    //    }
+    //    return httpResponse;
+    //}
 
     /**
      * Download the page.
@@ -55,13 +56,24 @@ public class SimpleDownloader extends AbstractDownloader {
 	@Override
 	public Page download(Request request) 
         throws URISyntaxException, ClientProtocolException, IOException {
-        System.out.println("Downloading page: " + request.getUrl());
-		setHttpGet(request);
-        httpResponse = httpClient.execute(httpGet);
-		return createPage(request);
+        logger.debug("Downloading page: {}", request.getUrl());
+        CloseableHttpClient httpClient = 
+            (httpClientBuilder == null)? 
+            HttpClients.createDefault():httpClientBuilder.build();
+        CloseableHttpResponse httpResponse;
+        HttpGet httpGet = new HttpGet();
+        Page page = null;
+		setHttpGet(httpGet, request);
+        try {
+            httpResponse = httpClient.execute(httpGet);
+            page = createPage(request, httpResponse);
+        } finally {
+            httpClient.close();
+        }
+		return page;
 	}
 
-    protected void setHttpGet(Request request) throws URISyntaxException {
+    protected void setHttpGet(HttpGet httpGet, Request request) throws URISyntaxException {
         //httpGet.reset();
         httpGet.setURI(new URI(request.getUrl()));
         //FIXME: the headers in request may be null.
@@ -71,13 +83,15 @@ public class SimpleDownloader extends AbstractDownloader {
     }
 
     //FIXME: Let resonse charset for pageText.
-    protected Page createPage(Request request) 
+    protected Page createPage(Request request, 
+            CloseableHttpResponse httpResponse) 
             throws UnsupportedOperationException, IOException {
         HttpEntity entity = httpResponse.getEntity();
-        String pageText = IOUtils.toString(
-                entity.getContent(),
-                StandardCharsets.UTF_8
-                ); 
+//        String pageText = IOUtils.toString(
+//                entity.getContent(),
+//                StandardCharsets.UTF_8
+//                ); 
+        String pageText = EntityUtils.toString(entity,"UTF-8");
         Page page = Page.Builder.getBuilder()
             .setRequest(request)
             .setText(pageText)

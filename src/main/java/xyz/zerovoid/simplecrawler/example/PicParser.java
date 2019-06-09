@@ -1,7 +1,5 @@
 package xyz.zerovoid.simplecrawler.example;
-
-import java.io.IOException;
-import java.util.regex.Matcher;
+import java.io.IOException; import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
@@ -12,6 +10,8 @@ import org.jsoup.select.Elements;
 import xyz.zerovoid.simplecrawler.item.Items;
 import xyz.zerovoid.simplecrawler.parser.AbstractParser;
 import xyz.zerovoid.simplecrawler.pipeline.BytePipeline;
+import xyz.zerovoid.simplecrawler.spider.RunnableSpider;
+import xyz.zerovoid.simplecrawler.spider.RunnableSpiderBuilder;
 import xyz.zerovoid.simplecrawler.spider.SimpleSpider;
 import xyz.zerovoid.simplecrawler.spider.SimpleSpiderBuilder;
 import xyz.zerovoid.simplecrawler.util.Page;
@@ -56,6 +56,13 @@ public class PicParser extends AbstractParser {
             .addPipelens(new
                     BytePipeline("/home/zerovoid/Downloads/pic/single/"))
             .build();
+        //RunnableSpider spider = RunnableSpiderBuilder.getNewBuilder()
+        //    .addRequest("https://manhua.fzdm.com/39/117/")
+        //    .setParser(new PicParser())
+        //    .addPipelens(new
+        //                BytePipeline("/home/zerovoid/Downloads/pic/multi/"))
+        //    .setNThread(5)
+        //    .build();
         spider.crawl();
     }
 }

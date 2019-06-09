@@ -24,12 +24,13 @@ import xyz.zerovoid.simplecrawler.util.Request;
  */
 public class SimpleSpider extends AbstractSpider {
 
-	private final static Logger logger = 
+	protected final static Logger logger = 
         LoggerFactory.getLogger(SimpleSpider.class);
-    //protected SimpleParser parser;
-    //protected SimpleScheduler scheduler;
-    //protected SimpleDownloader downloader;
-    //protected ArrayList<Pipeline> pipelines;
+
+    protected Request request = null;
+    protected Page page = null;
+    protected Items items = null;
+
 
     /**
      * Simplespider constructor.
@@ -41,17 +42,13 @@ public class SimpleSpider extends AbstractSpider {
         super(parser, scheduler, downloader, pipelines);
     }
 
-    //public SimpleSpider(String url, String urlRender) {
-    //    this(urlRender);
-    //    feedUrl.add(url);
-    //}
+    protected SimpleSpider() {
+        super();
+    }
 
     @Override
-    public void run() {
+    public void crawl() {
         logger.info("Spider start crawl.");
-        Page page = null;
-        Items items = null;
-        Request request = null;
         while(scheduler.hasNext()) {
             request = scheduler.pop();
             try {
@@ -64,6 +61,9 @@ public class SimpleSpider extends AbstractSpider {
 				e.printStackTrace();
 			}
             items = parser.parse(page);
+            if (items == null) {
+                continue;
+            }
             scheduler.push(items.getNewRequest());
             pipelines.get(0).processItem(items);
         }
@@ -79,6 +79,6 @@ public class SimpleSpider extends AbstractSpider {
                         .setParser(new SimpleParser())
                         .setMaxUrl(10)
                         .build();
-        spider.run();
+        spider.crawl();
     }
 }

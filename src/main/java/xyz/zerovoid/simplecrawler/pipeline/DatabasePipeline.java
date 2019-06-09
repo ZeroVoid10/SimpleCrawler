@@ -100,7 +100,7 @@ public class DatabasePipeline implements Pipeline {
 		}
     }
 
-    protected void insertAll(String table, String key, ArrayList<String> list) {
+    protected synchronized void insertAll(String table, String key, ArrayList<String> list) {
         String insertSql = "INSERT INTO " + table + " VALUES('" + key + "'";
         for (String value : list) {
             insertSql += ", '" + value + "'";

@@ -7,6 +7,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import xyz.zerovoid.simplecrawler.item.Items;
 import xyz.zerovoid.simplecrawler.parser.AbstractParser;
 import xyz.zerovoid.simplecrawler.pipeline.DatabasePipeline;
+import xyz.zerovoid.simplecrawler.spider.RunnableSpider;
+import xyz.zerovoid.simplecrawler.spider.RunnableSpiderBuilder;
 import xyz.zerovoid.simplecrawler.spider.SimpleSpider;
 import xyz.zerovoid.simplecrawler.spider.SimpleSpiderBuilder;
 import xyz.zerovoid.simplecrawler.util.Page;
@@ -136,15 +139,17 @@ public class JobParser extends AbstractParser {
                                 "zerovoid",
                                 "zerovoid" 
                 );
-        CloseableHttpClient httpClient = HttpClients.custom()
+        HttpClientBuilder httpBuilder = HttpClients.custom()
                     .setDefaultRequestConfig(RequestConfig.custom()
-                    .setCookieSpec(CookieSpecs.STANDARD).build())
-                    .build(); // TO fix apache invalid cookie warn.
-        SimpleSpider spider = SimpleSpiderBuilder.getNewBuilder()
+                    .setCookieSpec(CookieSpecs.STANDARD).build());
+                    // TO fix apache invalid cookie warn.
+        //SimpleSpider spider = SimpleSpiderBuilder.getNewBuilder()
+        RunnableSpider spider = RunnableSpiderBuilder.getNewBuilder()
             .addRequest("https://www.xiaobaishixi.com/jobs/c-100000c-110000_?k=%E8%BF%90%E8%90%A5&p=1")
             .setParser(new JobParser())
-            .setClient(httpClient)
+            .setHttpClientBuilder(httpBuilder)
             .addPipelens(pipeline)
+            .setNThread(5)
             .build();
         spider.crawl();
     }

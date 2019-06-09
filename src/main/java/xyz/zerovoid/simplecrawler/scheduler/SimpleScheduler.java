@@ -47,7 +47,7 @@ public class SimpleScheduler extends AbstractScheduler {
     }
 
     @Override
-	public boolean hasNext() {
+	public synchronized boolean hasNext() {
         if (limitedUrl) {
             return (countUrl > 0 && !requests.isEmpty());
         }
@@ -56,7 +56,7 @@ public class SimpleScheduler extends AbstractScheduler {
 
 	@Override
 	public Request pop() throws NoSuchElementException {
-        logger.info("scheduler pop");
+        logger.debug("scheduler pop");
         if (hasNext()) {
             countUrl -= (limitedUrl? 1:0);
             return requests.pop();
@@ -68,7 +68,7 @@ public class SimpleScheduler extends AbstractScheduler {
 
 	@Override
 	public boolean push(Request request) {
-        logger.info("Scheduler push:{}", request.getUrl());
+        logger.debug("Scheduler push:{}", request.getUrl());
         if (urlSet.add(request.getUrl())) {
             requests.add(request);
             return true;

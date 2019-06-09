@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import xyz.zerovoid.simplecrawler.util.Page;
 import xyz.zerovoid.simplecrawler.util.Request;
@@ -19,8 +20,8 @@ abstract public class AbstractDownloader {
     /**
      * Http Client for downloader.
      */
-    protected CloseableHttpClient httpClient;
-    protected CloseableHttpResponse httpResponse;
+    protected Request request;
+    protected HttpClientBuilder httpClientBuilder;
 
     /**
      * Download page requested by the request.

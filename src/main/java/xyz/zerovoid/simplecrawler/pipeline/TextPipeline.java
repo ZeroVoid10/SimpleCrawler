@@ -13,7 +13,7 @@ import xyz.zerovoid.simplecrawler.item.Items;
 
 /**
  * @author 孙艺佳
- * @since 0.3.0
+ * @since 0.2.1
  */
 public class TextPipeline implements Pipeline {
 
@@ -54,6 +54,7 @@ public class TextPipeline implements Pipeline {
                 items.getAll().entrySet()) {
             File file = new File(fileDir, 
                     entry.getKey() + "." + fileType);
+            logger.info("Save file: {}", file);
                 try {
                 	logger.debug("Writting...");
 					FileOutputStream fos = new FileOutputStream(file);
