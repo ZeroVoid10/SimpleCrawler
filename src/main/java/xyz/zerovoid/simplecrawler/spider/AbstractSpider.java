@@ -5,11 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import xyz.zerovoid.simplecrawler.downloader.AbstractDownloader;
-import xyz.zerovoid.simplecrawler.item.Items;
 import xyz.zerovoid.simplecrawler.parser.AbstractParser;
 import xyz.zerovoid.simplecrawler.pipeline.Pipeline;
 import xyz.zerovoid.simplecrawler.scheduler.AbstractScheduler;
-import xyz.zerovoid.simplecrawler.util.Page;
 import xyz.zerovoid.simplecrawler.util.Request;
 
 /**
@@ -23,6 +21,9 @@ abstract public class AbstractSpider {
     protected ArrayList<Pipeline> pipelines;
     protected Set<Request> feedRequest;
 
+    /**
+     * Get this class by SpiderBuilder class.
+     */
     protected AbstractSpider(AbstractParser parser,
             AbstractScheduler scheduler, 
             AbstractDownloader downloader, 
@@ -40,6 +41,7 @@ abstract public class AbstractSpider {
 
     /**
      * Run spider.
+     * TODO: May change method name to run.
      **/
     public abstract void crawl();
 

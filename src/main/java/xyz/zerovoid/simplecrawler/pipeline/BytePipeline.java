@@ -18,12 +18,17 @@ import org.slf4j.LoggerFactory;
 
 import xyz.zerovoid.simplecrawler.item.Items;
 
+/**
+ * @author 朱翔
+ * @since 0.2.1
+ */
 public class BytePipeline implements Pipeline {
 
     private static final Logger logger = 
         LoggerFactory.getLogger(BytePipeline.class);
 
     private File fileDir;
+    //TODO: Make class more flexible with setting file type.
     private String fileType = "jpg";
 
     public BytePipeline(String dir) throws IOException {

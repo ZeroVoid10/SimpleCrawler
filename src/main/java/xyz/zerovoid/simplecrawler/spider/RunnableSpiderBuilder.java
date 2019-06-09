@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +15,9 @@ import xyz.zerovoid.simplecrawler.pipeline.TextPipeline;
 import xyz.zerovoid.simplecrawler.scheduler.SimpleScheduler;
 import xyz.zerovoid.simplecrawler.util.Request;
 
+/**
+ * @since 0.2.1
+ */
 public class RunnableSpiderBuilder extends AbstractSpiderBuilder {
 	protected static Logger logger = 
 	        LoggerFactory.getLogger(RunnableSpiderBuilder.class);

@@ -6,13 +6,13 @@ import xyz.zerovoid.simplecrawler.parser.AbstractParser;
 import xyz.zerovoid.simplecrawler.pipeline.Pipeline;
 import xyz.zerovoid.simplecrawler.util.Request;
 
+/**
+ * @since 0.2.0
+ * TODO: Need to modify framework, maybe add Factory class. And 
+ *       make builder easier to use.
+ */
 public abstract class AbstractSpiderBuilder {
 
-    //protected AbstractEngine engine;
-
-    /**
-     * Abstract methods.
-     */
     public abstract AbstractSpider build();
     protected abstract void createScheduler();
     protected abstract void createDownloader();

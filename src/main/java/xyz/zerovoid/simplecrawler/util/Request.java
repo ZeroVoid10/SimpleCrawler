@@ -30,6 +30,7 @@ public class Request {
     protected HashMap<String, String> headers;
     /**
      * Let parser to know how to parser.
+     * TODO: Move to Page class.
      */
     protected HashSet<String> tags;
 

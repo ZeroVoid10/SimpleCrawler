@@ -1,11 +1,5 @@
 package xyz.zerovoid.simplecrawler.downloader;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 import xyz.zerovoid.simplecrawler.util.Page;
@@ -17,9 +11,6 @@ import xyz.zerovoid.simplecrawler.util.Request;
  */
 abstract public class AbstractDownloader {
 
-    /**
-     * Http Client for downloader.
-     */
     protected Request request;
     protected HttpClientBuilder httpClientBuilder;
 
@@ -28,10 +19,6 @@ abstract public class AbstractDownloader {
      * TODO: May use Apache HttpResponse handler to do this done.
      * @param reqest: contains uri and some other requests.
      * @return a {@link Page} wrapped html content.
-     * @throws URISyntaxException
-     * @throws IOException
-     * @throws ClientProtocolException
      */
-    abstract public Page download(Request request) 
-            throws URISyntaxException, ClientProtocolException, IOException;
+    abstract public Page download(Request request);
 }

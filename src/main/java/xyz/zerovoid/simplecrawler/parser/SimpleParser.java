@@ -11,23 +11,17 @@ import xyz.zerovoid.simplecrawler.item.Items;
 import xyz.zerovoid.simplecrawler.util.Page;
 
 /**
- * @author Zero Void <zerovoid10@163.com, zerolivenjoy@gmail.com>
+ * Simple parser example.
  * @since 0.1.0
  */
 public class SimpleParser extends AbstractParser {
 
-    //private String urlRender;
-
-    //public SimpleParser(String urlRender) {
-    //    this.urlRender = urlRender;
-    //}
     public SimpleParser() {
         super();
     }
 
     /**
      * To get page title and new URLs.
-     * TODO: Need to adjust.
      */
 	@Override
 	public Items parse(Page page) {

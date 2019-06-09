@@ -23,8 +23,12 @@ import xyz.zerovoid.simplecrawler.util.Page;
 import xyz.zerovoid.simplecrawler.util.Request;
 
 /**
- * FIXME: Maker thread safely.
+ * Spider can run in multible threads.
+ * Just setNThread() in builder class.
+ * Refer webmagic project: 
+ * @see <a href="https://github.com/code4craft/webmagic">webmagic github</a>
  * @since 0.2.1
+ * TODO: Add sleeping part when crawl.
  */
 public class RunnableSpider extends AbstractSpider {
 
@@ -102,19 +106,11 @@ public class RunnableSpider extends AbstractSpider {
     public void process(Request request) {
         try {
             logger.info("Process {}", request.getUrl());
-            try {
-                Page page = downloader.download(request);
-                Items items = parser.parse(page);
-                if (items != null) {
-                    pipelines.get(0).processItem(items);
-                    scheduler.push(items.getNewRequest());
-                }
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+            Page page = downloader.download(request);
+            Items items = parser.parse(page);
+            if (items != null) {
+                pipelines.get(0).processItem(items);
+                scheduler.push(items.getNewRequest());
             }
         } finally {
             try {

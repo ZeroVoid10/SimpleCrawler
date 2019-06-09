@@ -1,5 +1,7 @@
 package xyz.zerovoid.simplecrawler.example;
-import java.io.IOException; import java.util.regex.Matcher;
+
+import java.io.IOException; 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
@@ -16,6 +18,10 @@ import xyz.zerovoid.simplecrawler.spider.SimpleSpider;
 import xyz.zerovoid.simplecrawler.spider.SimpleSpiderBuilder;
 import xyz.zerovoid.simplecrawler.util.Page;
 
+/**
+ * author 朱翔
+ * @since 0.2.1
+ */
 public class PicParser extends AbstractParser {
 
     private final String prefix = "http://p1.xiaoshidi.net/";

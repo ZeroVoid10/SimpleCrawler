@@ -21,6 +21,7 @@ import xyz.zerovoid.simplecrawler.util.Request;
 
 /**
  * @Author 孙艺佳
+ * @since 0.2.1
  */
 public class NovelParser extends AbstractParser {
 

@@ -24,6 +24,7 @@ import java.util.Map;
  * A simple implementation of downloader.
  * Get {@link util.Request}, and download {@link util.Page}.
  * Just can download some static web site.
+ * @since 0.1.0
  */
 public class SimpleDownloader extends AbstractDownloader {
     
@@ -50,12 +51,9 @@ public class SimpleDownloader extends AbstractDownloader {
 
     /**
      * Download the page.
-     * @throws IOException 
-     * @throws UnsupportedOperationException 
      */
 	@Override
-	public Page download(Request request) 
-        throws URISyntaxException, ClientProtocolException, IOException {
+	public Page download(Request request) {
         logger.debug("Downloading page: {}", request.getUrl());
         CloseableHttpClient httpClient = 
             (httpClientBuilder == null)? 
@@ -63,18 +61,29 @@ public class SimpleDownloader extends AbstractDownloader {
         CloseableHttpResponse httpResponse;
         HttpGet httpGet = new HttpGet();
         Page page = null;
-		setHttpGet(httpGet, request);
         try {
+		    setHttpGet(httpGet, request);
             httpResponse = httpClient.execute(httpGet);
             page = createPage(request, httpResponse);
-        } finally {
-            httpClient.close();
+        } catch (URISyntaxException e) {
+            logger.warn("URI syntax error: {}", e);
+		} catch (ClientProtocolException e) {
+            logger.warn("Client Protocol Exception: {}", e);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+            try {
+				httpClient.close();
+			} catch (IOException e) {
+                logger.warn("Close http client IOException.");
+				e.printStackTrace();
+			}
         }
 		return page;
 	}
 
-    protected void setHttpGet(HttpGet httpGet, Request request) throws URISyntaxException {
-        //httpGet.reset();
+    protected void setHttpGet(HttpGet httpGet, Request request) 
+            throws URISyntaxException {
         httpGet.setURI(new URI(request.getUrl()));
         //FIXME: the headers in request may be null.
         for (Map.Entry<String, String> entry : request.getHeaders().entrySet()) {
@@ -102,22 +111,4 @@ public class SimpleDownloader extends AbstractDownloader {
 
         return page;
     }
-    
-    /**
-     * Just for single class testing.
-     */
-    public static void main(String[] args) throws IOException {
-        SimpleDownloader downloader = 
-            SimpleDownloaderBuilder.getBuilder().build();
-        Page page = null;
-        Request request = new Request("http://www.bilibili.com");
-
-        try {
-			page = downloader.download(request);
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        System.out.println(page);
-	}
 }

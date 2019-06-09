@@ -15,7 +15,7 @@ import xyz.zerovoid.simplecrawler.util.Request;
 
 /**
  * @author 李曼婷
- * @since 0.3.0
+ * @since 0.2.1
  * TODO: Make DatabasePipeline generally.
  * TODO: Make this class more flexible.
  */
@@ -144,11 +144,5 @@ public class DatabasePipeline implements Pipeline {
 
     public String getUser() {
         return user;
-    }
-
-    public static void main(String[] args) {
-        DatabasePipeline pipeline = new
-            DatabasePipeline("localhost", "simplecrawler", "3306", 
-                    "mariadb", "zerovoid", "zerovoid");
     }
 }

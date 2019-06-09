@@ -8,6 +8,7 @@ import java.util.Set;
 import xyz.zerovoid.simplecrawler.util.Request;
 
 /**
+ * What Parser will return to Pipeline after parse Page.
  * @since 0.2.0
  */
 public class Items {

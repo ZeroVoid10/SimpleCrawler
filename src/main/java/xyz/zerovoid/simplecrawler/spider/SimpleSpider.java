@@ -20,7 +20,6 @@ import xyz.zerovoid.simplecrawler.util.Request;
 /**
  * Just a simple example of a spider.
  * @since 0.1.0
- * TODO: Abstract important part to make Spider interface.
  */
 public class SimpleSpider extends AbstractSpider {
 
@@ -51,15 +50,7 @@ public class SimpleSpider extends AbstractSpider {
         logger.info("Spider start crawl.");
         while(scheduler.hasNext()) {
             request = scheduler.pop();
-            try {
-				page = downloader.download(request);
-			} catch (ClientProtocolException e) {
-				e.printStackTrace();
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			page = downloader.download(request);
             items = parser.parse(page);
             if (items == null) {
                 continue;
@@ -73,7 +64,6 @@ public class SimpleSpider extends AbstractSpider {
      * Test.
      */
     public static void main(String[] args) {
-        //SpiderFactory spiderFactory = SpiderFactory.getFactory();
         SimpleSpider spider = SimpleSpiderBuilder.getNewBuilder()
                         .addRequest("https://zh.moegirl.org/CAROLE_%26_TUESDAY")
                         .setParser(new SimpleParser())

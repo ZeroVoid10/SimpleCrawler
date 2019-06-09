@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Html content and some other things the parser may needed.
  * @since 0.2.0
+ * TODO: Add tag for parser to filter. Now the tag in Request do this thing.
  */
 public class Page {
 

@@ -30,5 +30,4 @@ public class ConsolePipeline implements Pipeline {
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }
 	}
-    
 }

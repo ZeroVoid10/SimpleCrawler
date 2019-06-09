@@ -13,8 +13,6 @@ public abstract class AbstractScheduler {
 
     public abstract boolean push(Request request);
     public abstract boolean push(String url);
-	public abstract boolean hasNext();
-
     public abstract void push(Collection<? extends Request> requests);
-    
+	public abstract boolean hasNext();
 }
