@@ -20,7 +20,7 @@ import xyz.zerovoid.simplecrawler.util.Page;
 import xyz.zerovoid.simplecrawler.util.Request;
 
 /**
- * @Author 孙艺佳
+ * @Author 
  * @since 0.2.1
  */
 public class NovelParser extends AbstractParser {
