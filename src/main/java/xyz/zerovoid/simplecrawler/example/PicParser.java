@@ -19,7 +19,7 @@ import xyz.zerovoid.simplecrawler.spider.SimpleSpiderBuilder;
 import xyz.zerovoid.simplecrawler.util.Page;
 
 /**
- * author 朱翔
+ * author 
  * @since 0.2.1
  */
 public class PicParser extends AbstractParser {
