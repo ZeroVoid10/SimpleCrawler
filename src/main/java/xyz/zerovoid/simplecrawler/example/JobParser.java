@@ -25,7 +25,7 @@ import xyz.zerovoid.simplecrawler.util.Page;
 import xyz.zerovoid.simplecrawler.util.Request;
 
 /**
- * @Author 李曼婷
+ * @Author 
  * TODO: Make information more useful.
  * TODO: Properly design database table.
  * @since 0.2.1
